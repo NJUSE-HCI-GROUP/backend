@@ -9,7 +9,16 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
+    },
+    email: {
+        type: String,
+        required: false
+    },
+    create_time: {
+        type: Date,
+        default: Date.now
     }
+    
 });
 
 const User = mongoose.model('User', userSchema);
