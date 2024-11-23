@@ -1,4 +1,5 @@
-const exec  = require('child_process');
+const  { exec }  = require('child_process');
+const fs = require('fs');
 const ffmpeg = require('fluent-ffmpeg');
 const ffmpegStatic = require('ffmpeg-static');
 const path = require('path');
@@ -47,6 +48,48 @@ function convertAudioFormat(inputPath, outputPath, options = {}) {
   }
 
 /**
+ * 合并多个音频文件
+ * @param {string[]} inputFiles - 要合并的音频文件路径数组
+ * @param {string} outputFile - 输出文件路径
+ * @returns {Promise<string>} - 合并后的音频文件路径
+ */
+function mergeAudio(inputFiles, outputFile) {
+  return new Promise((resolve, reject) => {
+    if (!Array.isArray(inputFiles) || inputFiles.length === 0) {
+      return reject(new Error('Input files must be a non-empty array.'));
+    }
+
+    // 检查输入文件是否存在
+    inputFiles.forEach(file => {
+      if (!fs.existsSync(file)) {
+        return reject(new Error(`File not found: ${file}`));
+      }
+    });
+
+    // 创建一个临时文件列表供 FFmpeg 使用
+    const listFile = path.join(__dirname, 'filelist.txt');
+    const fileListContent = inputFiles.map(file => `file '${file}'`).join('\n');
+    fs.writeFileSync(listFile, fileListContent);
+
+    // 构造 FFmpeg 命令
+    const command = `ffmpeg -f concat -safe 0 -i "${listFile}" -c copy "${outputFile}"`;
+
+    // 执行 FFmpeg 命令
+    exec(command, (error, stdout, stderr) => {
+      // 删除临时文件
+      fs.unlinkSync(listFile);
+
+      if (error) {
+        return reject(new Error(`FFmpeg error: ${stderr}`));
+      }
+
+      resolve(outputFile);
+    });
+  });
+}
+
+
+/**
  * 人声伴奏分离
  * @param {string} inputPath 音频输入路径
  * @param {string} outputPath 音频输出路径
@@ -70,5 +113,6 @@ function splitAudio(inputPath, outputPath) {
 
 module.exports = {
     convertAudioFormat,
+    mergeAudio,
     splitAudio
 };

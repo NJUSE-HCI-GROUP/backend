@@ -2,7 +2,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const userRoutes = require('./routes/userRoutes');
-
+const uploadRoutes = require('./routes/uploadRoutes');
 
 // 创建 Express 应用
 const app = express();
@@ -20,6 +20,7 @@ mongoose.connect('mongodb://localhost:27017/test').then(() => {
 });
 
 app.use('/', userRoutes);
+app.use('/upload', uploadRoutes);
 
 // 启动服务器
 const PORT = 3000;

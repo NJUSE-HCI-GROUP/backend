@@ -17,6 +17,14 @@ const userSchema = new mongoose.Schema({
     create_time: {
         type: Date,
         default: Date.now
+    },
+    photo_path: {
+        type: String,
+        required: false
+    },
+    audios_path: {
+        type: [String],
+        required: false
     }
     
 });

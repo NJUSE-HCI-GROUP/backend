@@ -2,11 +2,12 @@ const User = require('../models/user');
 
 
 class UserService {
-    async createUser(name, password, email) {
+    async createUser(name, password, email, photo_path) {
         const user = new User({
             name,
             password,
-            email
+            email,
+            photo_path
         });
         return await user.save();
     }
@@ -21,7 +22,7 @@ class UserService {
         });
     }
 
-    async updateUser(id, name, password, email) {
+    async updateUser(id, name, password, email, photo_path) {
         const user = await User.findById(id);
         if (!user) {
             throw new Error('User not found');
@@ -29,6 +30,7 @@ class UserService {
         user.name = name;
         user.password = password;
         user.email = email;
+        user.photo_path = photo_path;
         return await user.save();
     }
 
