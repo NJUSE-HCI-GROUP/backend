@@ -1,5 +1,5 @@
 const path = require('path');
-const audio = require('../models/audio');
+const filedb = require('../models/file');
 
 /**
  * 保存文件的业务逻辑
@@ -11,7 +11,16 @@ const saveFile = (file) => {
     throw new Error('未上传文件');
   }
 
+  // const existingFile = filedb.findOne({ original_name: file.originalname });
+  // if (existingFile) {
+  //   throw new Error('文件已存在');
+  // }
+
   // 返回文件路径或执行进一步处理
+  filedb.create({
+    store_path: file.filename,
+    original_name: file.originalname,
+  });
   const filePath = path.resolve(__dirname, '../uploads', file.filename);
   return {
     message: '文件上传成功',

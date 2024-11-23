@@ -1,5 +1,5 @@
 // src/controllers/uploadController.js
-const { saveFile } = require('../services/uploadService');
+const { saveFile } = require('../services/fileService');
 
 /**
  * 文件上传控制器

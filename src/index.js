@@ -2,7 +2,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const userRoutes = require('./routes/userRoutes');
-const uploadRoutes = require('./routes/uploadRoutes');
+const fileRoutes = require('./routes/fileRoutes');
 
 // 创建 Express 应用
 const app = express();
@@ -19,8 +19,11 @@ mongoose.connect('mongodb://localhost:27017/test').then(() => {
     console.error('Error connecting to MongoDB:', error);
 });
 
-app.use('/', userRoutes);
-app.use('/upload', uploadRoutes);
+
+
+app.use('/user', userRoutes);
+app.use('/file', fileRoutes);
+
 
 // 启动服务器
 const PORT = 3000;

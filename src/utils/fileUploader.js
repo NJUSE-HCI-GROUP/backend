@@ -6,7 +6,7 @@ const fs = require('fs');
 // 配置存储路径和文件名规则
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadDir = path.join(__dirname, 'uploads');
+    const uploadDir = path.join(__dirname, '../../public/uploads');
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true }); // 确保目录存在
     }
@@ -27,4 +27,4 @@ const upload = multer({ storage });
  */
 const fileUploader = (fieldName) => upload.single(fieldName);
 
-module.exports = fileUploader;
+module.exports = {fileUploader};
