@@ -1,15 +1,14 @@
 const mongoose = require('mongoose');
 
 const fileSchema = new mongoose.Schema({
-    // user: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'User',
-    //     required: true
-    // },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
     original_name: {
         type: String,
         required: true,
-        // unique: true
     },
     store_path: {
         type: String,

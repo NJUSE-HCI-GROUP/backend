@@ -49,7 +49,14 @@ class UserService {
         });
         return user;
     }
-
+    async login(name, password) {
+        const user = await User
+            .findOne({
+                name,
+                password
+            });
+        return user;
+    }
 
 }
 

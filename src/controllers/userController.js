@@ -33,9 +33,23 @@ exports.getUserByName = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
     const { id } = req.params;
-    const { name, password, email, photo_path} = req.body;
+    let { name, password, email, photo_path} = req.body;
+    const user = await UserService.getUserById(id);
+    if (!name) {
+        name = user.name;
+    }
+    if (!password) {
+        password = user.password;
+    }
+    if (!email) {
+        email = user.email;
+    }
+    if (!photo_path) {
+        photo_path = user.photo_path;
+    }
+
     try {
-        const user = await UserService.updateUser(id, name, password, email, photo_path?? null);
+        const user = await UserService.updateUser(id, name, password, email, photo_path);
         res.status(200).json(user);
     } catch (error) {
         res.status(404).json({ error: error.message });
@@ -66,6 +80,16 @@ exports.validateUser = async (req, res) => {
     const { name, password } = req.body;
     try {
         const user = await UserService.validateUser(name, password);
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(404).json({ error: error.message });
+    }
+}
+
+exports.login = async (req, res) => {
+    const { name, password } = req.body;
+    try {
+        const user = await UserService.login(name, password);
         res.status(200).json(user);
     } catch (error) {
         res.status(404).json({ error: error.message });
